@@ -4,7 +4,7 @@ Code for reproducing Fig. 3 of the paper.
 
 Figures_main
 %% Load distractor decoding output
-eeg.dec.dist = load('/media/hdd/Sanchit/Exogenous_Project/Analysis Data/EEG_posterior_all/EEGAnalysis_Distractor_Decoding_July_06_2024_14_09_56.mat');
+load('../../Data/Decoding/Dist_DecodabilitySaved_Subs_trials.mat');
 
 %x axis for tuning curves
 step_size = 180/16;
@@ -12,10 +12,8 @@ angspace_ang2 = (90:-step_size:-90) - step_size/2;
 angspace_ang2(end) = [];
 
 %% Fig. 3A. Distractor tuning curve
-time = eeg.dec.dist.eeg.decodingTrC.DistractorOnset.time(1,:); 
-dis_mem_l = nanmean(eeg.dec.dist.eeg.decodingTrC.DistractorOnset.l.dists_mem, 4);
-dis_mem_r = nanmean(eeg.dec.dist.eeg.decodingTrC.DistractorOnset.r.dists_mem, 4);
-
+dis_mem_l = dis_mem_l;
+dis_mem_r = dis_mem_r;
 dis_mem = squeeze(mean((dis_mem_l + dis_mem_r)/2,1));
 
 % figure
@@ -42,11 +40,10 @@ ax.YTick = [-90:45:90];
 
 %% Fig. 3B. Distractor Cued vs Uncued decoding 
 % Distractor 
-time_dist = eeg.dec.dist.eeg.decodingTrC.DistractorOnset.time(1,:); 
-cos_mem_l_al = nanmean(eeg.dec.dist.eeg.decodingTrC.DistractorOnset.l.cos_mem(:,:,idxL), 3);
-cos_mem_r_al = nanmean(eeg.dec.dist.eeg.decodingTrC.DistractorOnset.r.cos_mem(:,:,idxL), 3);
-cos_mem_l_ar = nanmean(eeg.dec.dist.eeg.decodingTrC.DistractorOnset.l.cos_mem(:,:,idxR), 3);
-cos_mem_r_ar = nanmean(eeg.dec.dist.eeg.decodingTrC.DistractorOnset.r.cos_mem(:,:,idxR), 3);
+cos_mem_l_al = nanmean(cos_mem_l(:,:,idxL),3);
+cos_mem_r_al = nanmean(cos_mem_r(:,:,idxL),3);
+cos_mem_l_ar = nanmean(cos_mem_l(:,:,idxR),3);
+cos_mem_r_ar = nanmean(cos_mem_r(:,:,idxR),3);
 
 cos_mem_avg_cu = (cos_mem_l_al + cos_mem_r_ar)/2;
 cos_mem_avg_uc = (cos_mem_l_ar + cos_mem_r_al)/2;
@@ -83,7 +80,7 @@ xlabel('Time (s) from distractor onset');
 % comparision and violin plot at peak Dist. decoding
 t_idx = knnsearch(time_dist', 0.25); % 166
 m = [cos_mem_avg_cu(:,t_idx), cos_mem_avg_uc(:,t_idx)];
-doPermutationTest(m*1e4);
+doPermutationTest(m*1e4,'larger','right');
 
 % figure
 tl1 = tiledlayout(tl, 2,2, 'TileSpacing','compact', 'Padding', 'compact'); 
@@ -107,7 +104,7 @@ title(tl1, 'Decoding Cu vs Uc', 'FontSize', 8)
 
 
 %% Fig 3 C-D Distractor Encoding based Median Spits
-Behcorr.decoding = load('/media/hdd/Sanchit/Exogenous_Project/Analysis Data/Comb_DistractorProject/Comb_May_21_2024_16_17_19.mat');
+Behcorr.decoding = load('../../Data/MedianSplit_Beh/Comb_May_21_2024_16_17_19.mat');
 
 
 tl1 = tiledlayout(tl, 1, 1, 'TileSpacing','compact', 'Padding', 'compact');
@@ -170,9 +167,9 @@ ax = gca;
 ax.Box = 'off';
 ax.XTick = [-90:45:90];
 ax.YAxis.Visible = 'on';
-title('Encoding');
+title('Dist. Encoding');
 tx = text([15, 15],[-4, -5],{'Weak','Strong'}); 
-tx(1).Color = color_map(1,:); tx(2).Color = color_map(2,:);
+tx(1).Color = color_map(1,:); tx(2).Color = color_map(1,:);tx(2).FontWeight='bold';
 % ax.XAxis.Visible = 'off'; % remove x-axis
 % xlabel('Distractor - Target Orientation (\circ)'); 
 % ylabel('Response - Target Orientation (\circ)'); 
@@ -199,7 +196,7 @@ ax.YAxis.Visible = 'on';
 % tx = text([1,2], [12, 12], {'n.s.', 'p=0.01'}, 'HorizontalAlignment', 'center');
 % tx(2).FontSize = 12; 
 tx = text([1,2], [-12, -12], {'Weak', 'Strong'}, 'HorizontalAlignment', 'center');
-tx(1).Color = color_map(1,:); tx(2).Color = color_map(1,:);
+tx(1).Color = color_map(1,:); tx(2).Color = color_map(1,:);tx(2).FontWeight='bold';
 
 
 
@@ -266,7 +263,7 @@ ax.XTick = [-90:45:90];
 ax.YAxis.Visible = 'on';
 title('Encoding');
 tx = text([15, 15],[-4, -5],{'Weak','Strong'}); 
-tx(1).Color = color_map(2,:); tx(2).Color = color_map(2,:);
+tx(1).Color = color_map(2,:); tx(2).Color = color_map(2,:);tx(2).FontWeight='bold';
 % ax.XAxis.Visible = 'off'; % remove x-axis
 % xlabel('Distractor - Target Orientation (\circ)'); 
 % ylabel('Response - Target Orientation (\circ)'); 
@@ -293,4 +290,4 @@ ax.YAxis.Visible = 'on';
 % tx = text([1,2], [12, 12], {'n.s.', 'p=0.01'}, 'HorizontalAlignment', 'center');
 % tx(2).FontSize = 12; 
 tx = text([1,2], [-12, -12], {'Weak', 'Strong'}, 'HorizontalAlignment', 'center');
-tx(1).Color = color_map(2,:); tx(2).Color = color_map(2,:);
+tx(1).Color = color_map(2,:); tx(2).Color = color_map(2,:);tx(2).FontWeight='bold';
