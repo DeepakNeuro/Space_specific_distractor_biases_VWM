@@ -4,12 +4,12 @@ Code for reproducing Fig. 4 of the paper.
 Figures_main
 
 %% Load Data
-Behcorr.time = load('/media/hdd/Sanchit/Exogenous_Project/Analysis Data/Comb_DistractorProject/Comb_March_24_2023_09_00_55.mat');
-Behcorr.gating = load('/media/hdd/Sanchit/Exogenous_Project/Analysis Data/Comb_DistractorProject/Comb_May_21_2024_15_27_19.mat');
-Behcorr.decoding = load('/media/hdd/Sanchit/Exogenous_Project/Analysis Data/Comb_DistractorProject/Comb_May_21_2024_16_17_19.mat');
+Behcorr.time = load('../../Data/MedianSplit_Beh/Comb_March_24_2023_09_00_55.mat');
+Behcorr.gating = load('../../Data/MedianSplit_Beh/Comb_May_21_2024_15_27_19.mat');
+Behcorr.decoding = load('../../Data/MedianSplit_Beh/Comb_May_21_2024_16_17_19.mat');
 
 %% Fig. 4 A distractor evoked ERP
-eeg.erp = load('/media/hdd/Sanchit/Exogenous_Project/Analysis Data/EEG/Decoding/EEGAnalysis_ERPsDist_May_17_2024_13_45_32.mat');
+eeg.erp = load('../../Data/Decoding/EEGAnalysis_ERPsDist_May_17_2024_13_45_32.mat');
 
 e_c_ad = eeg.erp.eeg.erp.distractorOnset.e_c_ad;
 e_c_ud = eeg.erp.eeg.erp.distractorOnset.e_c_ud;
@@ -33,7 +33,7 @@ m_i = [m_i_cu; m_i_uc]';
 se_i = [se_i_cu; se_i_uc]';
 
 tl1 = tiledlayout(tl, 1, 1, 'TileSpacing','compact', 'Padding', 'compact'); 
-tl1.Layout.Tile = 19;
+tl1.Layout.Tile = 25;
 tl1.Layout.TileSpan = [2 3];
 
 tp = nexttile(tl1,1);
@@ -92,7 +92,7 @@ doPermutationTest([erp_cu_contra_n1, erp_uc_contra_n1],'both','both')
 doPermutationTest([erp_cu_contra_p2, erp_uc_contra_p2],'both','both')
 
 tl1 = tiledlayout(tl, 1, 1, 'TileSpacing','compact', 'Padding', 'compact'); 
-tl1.Layout.Tile = 22;
+tl1.Layout.Tile = 28;
 tl1.Layout.TileSpan = [2 2];
 tp = nexttile(tl1,1);
 xlim([0.5 2.5])
@@ -107,7 +107,7 @@ ax.XAxis.Visible = 'off';
 title(tl1, 'ERP Cu vs Uc (N2)', 'FontSize', 8)
 
 tl1 = tiledlayout(tl, 1, 1, 'TileSpacing','compact', 'Padding', 'compact'); 
-tl1.Layout.Tile = 34;
+tl1.Layout.Tile = 40;
 tl1.Layout.TileSpan = [2 2];
 tp = nexttile(tl1,1);
 xlim([0.5 2.5])
@@ -189,7 +189,7 @@ ax.XTick = [-90:45:90];
 ax.YTick = [-3:1:3]*2;
 title('Time');
 tx = text([15, 15],[-4, -5],{'Early','Late'}); 
-tx(1).Color = color_map_split(1,:); tx(2).Color = color_map_split(2,:);
+tx(1).Color = color_map(1,:); tx(2).Color = color_map(1,:);tx(2).FontWeight='bold';
 xlabel('Distractor - Actual Ori. (°)')
 ylabel('Response - Actual Ori. (°)')
 
@@ -222,7 +222,7 @@ tx(1).Color = color_map(1,:); tx(2).Color = color_map(1,:);
 
 %% Fig. 4C. & corresponding SI --  Median split Distractor gating 
 tl1 = tiledlayout(tl, 1, 1, 'TileSpacing','compact', 'Padding', 'compact');
-tl1.Layout.Tile = 5;
+tl1.Layout.Tile = 3;
 tl1.Layout.TileSpan = [2, 2];
 
 tp = nexttile(tl1, 1);
@@ -279,23 +279,23 @@ r = vline(0); r.Color = [1 1 1]*0.7; r.LineStyle = '--'; r.LineWidth = 1;
 ax = gca; 
 ax.Box = 'off';
 ax.XTick = [-90:45:90];
-ax.Ytick = [-6:2:6];
+ax.YTick = [-6:2:6];
 ax.YAxis.Visible = 'on';
 title('Gating');
 tx = text([15, 15],[-4, -5],{'Strong P2/P3a','Weak P2/P3a'}); 
-tx(1).Color = color_map(1,:); tx(2).Color = color_map(1,:);
+tx(1).Color = color_map(1,:); tx(2).Color = color_map(1,:);tx(2).FontWeight = 'bold';
 xlabel('Distractor - Actual Ori. (°)')
 
 
 
-non_nan_hi = ~isnan(Behcorr.gating.comb.hi.wm.bias.y.area.cu.do);
-non_nan_lo = ~isnan(Behcorr.gating.comb.lo.wm.bias.y.area.cu.do);
-m = [Behcorr.gating.comb.hi.wm.bias.y.area.cu.do(non_nan_hi), Behcorr.gating.comb.lo.wm.bias.y.area.cu.do(non_nan_lo)];
+non_nan_hi = ~isnan(Behcorr.gating.comb.hi.wm.bias.y.area.cu.ds);
+non_nan_lo = ~isnan(Behcorr.gating.comb.lo.wm.bias.y.area.cu.ds);
+m = [Behcorr.gating.comb.hi.wm.bias.y.area.cu.ds(non_nan_hi), Behcorr.gating.comb.lo.wm.bias.y.area.cu.ds(non_nan_lo)];
 % doPermutationTest(m(:,1)*[1 0],'smaller'); doPermutationTest(m(:,2)*[1 0],'smaller');
 % doPermutationTest(m,'larger');
 
 tl1 = tiledlayout(tl, 1, 2, 'TileSpacing','compact', 'Padding', 'compact');
-tl1.Layout.Tile = 17;
+tl1.Layout.Tile = 15;
 tl1.Layout.TileSpan = [2 3];
 tp = nexttile(tl1, 1);
 
@@ -303,7 +303,7 @@ xlim([0.5 2.5])
 ylim([-12, 14]);
 r = hline(0); r.Color = [1 1 1]*0.7; r.LineStyle = '--'; r.LineWidth = 1;
 hold on; 
-[vp, bp] = violin_plot(m, color_map_split); 
+[vp, bp] = violin_plot(m, [color_map(1,:); color_map(1,:)]); 
 ax = gca; 
 ax.Box = 'off';
 ax.YTick = [-1:1:1]*10;
@@ -312,4 +312,4 @@ ax.YAxis.Visible = 'on';
 % tx = text([1,2], [12, 12], {'n.s.', 'p=0.002'}, 'HorizontalAlignment', 'center');
 % tx(2).FontSize = 12; 
 tx = text([1,2], [-12, -12], {'Strong P2/P3a', 'Weak P2/P3a'}, 'HorizontalAlignment', 'center');
-tx(1).Color = color_map(1,:); tx(2).Color = color_map(1,:);
+tx(1).Color = color_map(1,:); tx(2).Color = color_map(1,:);tx(2).FontWeight = 'bold';
